@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Для тебя 💌</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Nunito:wght@400;700&display=swap">
+<style>
+:root{--bg:#ffe9ef;--card:#fff8fa;--fg:#4a2233;--accent:#e8436f;--soft:#f7c3d1;--muted:#8a5a6c;
+--display:"Caveat",cursive;--body:"Nunito",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root{--bg:#2a1520;--card:#361b28;--fg:#ffe3ec;--accent:#ff6b93;--soft:#5a2b3e;--muted:#d6a3b6;color-scheme:dark}}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);display:grid;place-items:center;padding-inline:16px;overflow-x:hidden}
+[hidden]{display:none!important}
+.card{background:var(--card);border-radius:24px;padding:28px 22px;max-width:440px;width:100%;box-sizing:border-box;text-align:center;box-shadow:0 10px 40px rgba(232,67,111,.18);position:relative;z-index:1;margin-block:16px}
+.dots{display:flex;gap:6px;justify-content:center;margin-bottom:8px}
+.dots i{width:8px;height:8px;border-radius:50%;background:var(--soft)}.dots i.on{background:var(--accent)}
+h1{font-family:var(--display);font-size:2.4rem;line-height:1.1;margin:6px 0 12px;text-wrap:balance}
+p{color:var(--muted);font-size:1rem;margin:0 0 18px;line-height:1.5}
+.big{font-size:3.6rem;line-height:1}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;min-height:54px;align-items:center}
+button{font-family:var(--body);font-weight:700;font-size:1.05rem;border:0;border-radius:999px;padding:13px 26px;cursor:pointer;transition:transform .15s}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.yes{background:var(--accent);color:#fff}
+.no{background:var(--soft);color:var(--fg)}
+.flee{position:fixed!important;transition:left .2s,top .2s;z-index:5}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.opt{background:var(--soft);color:var(--fg);padding:12px;border-radius:14px;font-size:.95rem}
+.opt[aria-pressed="true"]{background:var(--accent);color:#fff}
+input,textarea{font-family:var(--body);font-size:1rem;padding:10px 14px;border-radius:12px;border:2px solid var(--soft);background:var(--bg);color:var(--fg);width:100%;box-sizing:border-box;margin-bottom:16px}
+textarea{min-height:90px;resize:vertical}
+input[type=range]{accent-color:var(--accent);padding:0;border:0;background:none}
+.meter{font-family:var(--display);font-size:1.8rem;color:var(--accent);margin-bottom:6px}
+.small{font-size:.85rem}
+label.small{display:block;margin-bottom:6px;color:var(--muted)}
+.heart{position:fixed;pointer-events:none;font-size:24px;animation:fly 2.5s ease-out forwards;z-index:0}
+@keyframes fly{to{transform:translateY(-110vh) rotate(30deg);opacity:0}}
+@media (prefers-reduced-motion:reduce){.heart{display:none}.flee{transition:none}}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="dots" id="dots"></div>
+
+  <section data-step>
+    <div class="big">🥺</div>
+    <h1>Прости меня, малыш</h1>
+    <p>Давай встретимся с тобой и всё обсудим. Я подготовил пару вопросов, ответь на них, пожалуйста 💌</p>
+    <button class="yes" data-next>Ладно, читаю…</button>
+  </section>
+
+  <section data-step hidden>
+    <div class="big">🙈</div>
+    <h1>Я правда был неправ</h1>
+    <p>Мне очень тебя не хватает. Ты меня простишь?</p>
+    <div class="btns">
+      <button class="yes" id="forgive">Прощаю 💖</button>
+      <button class="no" id="no">Нет</button>
+    </div>
+  </section>
+
+  <section data-step hidden>
+    <div class="big" id="moodEmoji">😐</div>
+    <h1>Насколько ты ещё дуешься?</h1>
+    <div class="meter" id="moodTxt">50%</div>
+    <input type="range" id="mood" min="0" max="100" value="50" aria-label="Насколько дуешься">
+    <p class="small">0% значит «уже всё хорошо», 100% значит «обнимать минимум час без перерыва»</p>
+    <button class="yes" data-next>Дальше</button>
+  </section>
+
+  <section data-step hidden>
+    <div class="big">🗺️</div>
+    <h1>Куда пойдём мириться?</h1>
+    <div class="opts" id="places">
+      <button class="opt" aria-pressed="false">🍔 Перекусить</button>
+      <button class="opt" aria-pressed="false">🎬 Кино</button>
+      <button class="opt" aria-pressed="false">🌳 Прогулка</button>
+      <button class="opt" aria-pressed="false" data-own>✏️ Свой вариант</button>
+    </div>
+    <input id="own" placeholder="Напиши, куда хочешь" maxlength="200" hidden>
+    <button class="yes" data-next>Дальше</button>
+  </section>
+
+  <section data-step hidden>
+    <div class="big">📅</div>
+    <h1>Когда тебе удобно?</h1>
+    <label for="when" class="small">Дата и время</label>
+    <input type="datetime-local" id="when">
+    <label for="note" class="small">Что хочешь мне сказать? (необязательно)</label>
+    <textarea id="note" maxlength="1000" placeholder="Например: ты дурак, но я тебя люблю"></textarea>
+    <button class="yes" id="send">Отправить ✨</button>
+  </section>
+
+  <section data-step hidden>
+    <div class="big">💌</div>
+    <h1>Спасибо, солнце!</h1>
+    <p id="summary"></p>
+    <p id="saved" class="small">Отправляю…</p>
+  </section>
+</div>
+
+<script>
+const EMAIL='fsinyakovas@gmail.com';
+const $=id=>document.getElementById(id);
+const steps=[...document.querySelectorAll('[data-step]')];let cur=0;
+const dots=$('dots');steps.forEach(()=>dots.appendChild(document.createElement('i')));
+const no=$('no');
+function show(i){steps.forEach((s,k)=>s.hidden=k!==i);cur=i;[...dots.children].forEach((d,k)=>d.classList.toggle('on',k<=i));no.classList.remove('flee')}
+document.querySelectorAll('[data-next]').forEach(b=>b.onclick=()=>show(cur+1));
+
+function hearts(k=30){for(let i=0;i<k;i++)setTimeout(()=>{const h=document.createElement('div');h.className='heart';
+  h.textContent=['💖','💕','❤️','💗'][i%4];h.style.left=Math.random()*100+'vw';h.style.top='100vh';
+  document.body.appendChild(h);setTimeout(()=>h.remove(),2600)},i*60)}
+
+const phrases=['Нет','Точно?','Ну малыш 🥺','Я исправлюсь!','Кнопка сломалась','Не-а 😏','Попробуй другую'];
+let n=0,scale=1,tries=0;
+function flee(e){e&&e.preventDefault();n++;tries++;no.textContent=phrases[n%phrases.length];no.classList.add('flee');
+  const w=innerWidth-no.offsetWidth-16,h=innerHeight-no.offsetHeight-16;
+  no.style.left=Math.max(16,Math.random()*w)+'px';no.style.top=Math.max(16,Math.random()*h)+'px';
+  scale=Math.min(scale+.12,1.8);$('forgive').style.transform=`scale(${scale})`}
+no.addEventListener('mouseenter',flee);no.addEventListener('touchstart',flee,{passive:false});no.addEventListener('click',flee);
+$('forgive').onclick=()=>{hearts();show(2)};
+
+const moods=[[20,'🥰'],[40,'🙂'],[60,'😐'],[80,'😤'],[101,'🔥']];
+$('mood').oninput=e=>{const v=+e.target.value;$('moodTxt').textContent=v+'%';$('moodEmoji').textContent=moods.find(m=>v<m[0])[1]};
+
+let place='';
+$('places').onclick=e=>{const b=e.target.closest('.opt');if(!b)return;
+  $('places').querySelectorAll('.opt').forEach(x=>x.setAttribute('aria-pressed','false'));b.setAttribute('aria-pressed','true');
+  const own=b.hasAttribute('data-own');$('own').hidden=!own;if(own)$('own').focus();place=own?'':b.textContent};
+
+const fmt=w=>w?new Date(w).toLocaleString('ru-RU',{day:'numeric',month:'long',hour:'2-digit',minute:'2-digit'}):'когда скажешь';
+$('send').onclick=async()=>{
+  const where=(place||$('own').value.trim()||'на твой выбор');
+  const when=fmt($('when').value);
+  $('summary').textContent=`${where}, ${when}. Жду не дождусь 🥰`;
+  show(5);hearts(40);
+  try{
+    const r=await fetch('https://formsubmit.co/ajax/'+EMAIL,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify({_subject:'💌 Она ответила!',_template:'table',_captcha:'false',
+        'Куда идём':where,'Когда':when,'Ещё дуется':$('mood').value+'%','Пыталась нажать «Нет»':tries+' раз','Сообщение':$('note').value.trim()||'—'})});
+    if(!r.ok)throw 0;$('saved').textContent='Ответ уже у меня 😘';
+  }catch{$('saved').textContent='Сделай скриншот и отправь мне 😘'}
+};
+show(0);
+</script>
+</body>
+</html>
